@@ -12,9 +12,7 @@ class Goi{
     col=(SizeX/widthS);
     row=(SizeY/widthS);
     arr=new Square[col][row];
-    println(row*col);
-    println(col);
-   println(row);
+
   }
   
   void init(){
@@ -34,11 +32,16 @@ class Goi{
   
  
   void draw(){
+    int clicked=0;
       for(int i=0;i<this.col;i++){
         for(int j=0;j<this.row;j++){
         this.arr[i][j].draw();
+        if(arr[i][j].clicked==1){
+          clicked++;
+        }
         }
     }
+    println(clicked);
     
   }
   void mouseIsClicked(){
@@ -55,7 +58,7 @@ class Goi{
    
    
    
-    int getNeightboors(int x, int y) {
+    int getNeightboors(int x,int y) {
 
             int temp = 0;
             for (int i = -1; i < 2; i++) {
@@ -71,10 +74,9 @@ class Goi{
    
             if(arr[x][y].clicked==1){
                 temp-=1;
+                println("dasdas");
             }
-            if(x==1 && y==1){
-              println("temp= "+ temp + " x = "+ x+ " Y = "+y );
-            }
+         
            
             return temp;
         }
@@ -87,16 +89,19 @@ class Goi{
             for (int i = 0; i < col; i++) {
                 for (int j = 0; j < row; j++) {
                     int neigh = getNeightboors(i, j);
-                    
-                    if (neigh < 2 || neigh >3) {
-                        newGen[i][j] = arr[i][j];
-                        newGen[i][j].clicked=-1;
-                    } else if (neigh == 3 ) {
-                        newGen[i][j] = arr[i][j];
-                        newGen[i][j].clicked=1;
-                    } else {
-                        newGen[i][j] = arr[i][j];
-                    }
+                    int state=arr[i][j].clicked;
+                  if(neigh==3 && state==-1){
+                    newGen[i][j]=new Square(arr[i][j].x,arr[i][j].y,widthS);
+                    newGen[i][j].clicked=1;
+                  }
+                  else if(state==1 && (neigh>3 || neigh<2)){
+                    newGen[i][j]=new Square(arr[i][j].x,arr[i][j].y,widthS);
+                    newGen[i][j].clicked=-1;
+                  }
+                  else {
+                    newGen[i][j]=new Square(arr[i][j].x,arr[i][j].y,widthS);
+                    newGen[i][j].clicked=arr[i][j].clicked;
+                  }
                 }
 
             }
